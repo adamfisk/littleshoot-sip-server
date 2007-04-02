@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!--
+        The NIO selector for the SIP server. 
+    -->
+    <bean id="sipSelectorManager"
+          class="org.lastbamboo.shoot.nio.SelectorManagerImpl"
+          >
+          <constructor-arg><value>SIP-proxy</value></constructor-arg>
+          </bean>
+    
+    <!--
+        The SIP registrar.
+    -->
+    <bean id="sipRegistrar"
+          class="org.lastbamboo.platform.sip.proxy.SipRegistrarImpl">
+        <constructor-arg><ref bean="sipMessageFactory"/></constructor-arg>
+        <constructor-arg><ref bean="sipTransportLayer"/></constructor-arg>
+        </bean>
+        
+     <!--
+        The Last Bamboo location service.
+    -->
+    <bean id="lastBambooLocationService"
+          class="org.lastbamboo.platform.sip.proxy.LastBambooLocationService">
+        <constructor-arg><ref bean="uriUtils"/></constructor-arg>
+        <constructor-arg><ref bean="idToRegistrars"/></constructor-arg>
+        </bean>
+        
+        
+    <!--
+   		The location service chain.
+    -->
+    <bean id="locationServiceChain"
+          class="org.lastbamboo.platform.sip.proxy.LocationServiceChain">
+        <constructor-arg>
+            <list>
+                <ref local="lastBambooLocationService"/>
+                </list>
+            </constructor-arg>
+        </bean>
+        
+    <bean id="unregisteredUriForwarder"
+    	  class="org.lastbamboo.platform.sip.proxy.stateless.UnregisteredUriForwarder">
+    	  <constructor-arg><ref local="locationServiceChain"/></constructor-arg>
+    	  <constructor-arg><ref bean="sipTransportLayer"/></constructor-arg>
+    	  <constructor-arg><ref local="sipSelectorManager"/></constructor-arg>
+    	  <constructor-arg><ref bean="uriUtils"/></constructor-arg>
+    	  <constructor-arg><ref bean="sipMessageFactory"/></constructor-arg>
+    	  <constructor-arg><ref local="sipRegistrar"/></constructor-arg>
+    	  </bean>
+    	  
+    <bean id="externalDomainForwarder"
+    	  class="org.lastbamboo.platform.sip.proxy.stateless.ExternalDomainForwarder">
+    	  </bean>
+    	  
+    <!--
+        The stateless SIP proxy.
+    -->
+    <bean id="statelessSipProxy"
+          class="org.lastbamboo.platform.sip.proxy.stateless.StatelessSipProxy">
+        <constructor-arg><ref bean="sipTransportLayer"/></constructor-arg>
+        <constructor-arg><ref local="sipRegistrar"/></constructor-arg>
+        <constructor-arg><ref local="unregisteredUriForwarder"/></constructor-arg>
+        <constructor-arg><ref local="externalDomainForwarder"/></constructor-arg>
+        <constructor-arg><ref bean="uriUtils"/></constructor-arg>
+        <constructor-arg><ref bean="sipMessageFactory"/></constructor-arg>
+        </bean>
+          
+    <bean id="sipAcceptorListener"
+    	  class="org.lastbamboo.platform.sip.proxy.SipProxyAcceptorListener">
+        <constructor-arg><ref local="sipSelectorManager"/></constructor-arg>
+        <constructor-arg ref="sipMessageFactory"/>
+        <constructor-arg><ref local="sipRegistrar"/></constructor-arg>
+    	<constructor-arg><ref local="statelessSipProxy"/></constructor-arg>
+        <constructor-arg ref="sipTransportLayer"/>
+    	</bean>
+            
+        
+        
+  	<bean id="sipProxy"
+  		  class="org.lastbamboo.platform.sip.proxy.SipProxyImpl"> 
+  		<constructor-arg><ref local="sipSelectorManager"/></constructor-arg>
+        <constructor-arg><ref local="sipAcceptorListener"/></constructor-arg>
+  		</bean>
+</beans>

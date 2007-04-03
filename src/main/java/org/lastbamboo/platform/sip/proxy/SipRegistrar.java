@@ -2,8 +2,8 @@ package org.lastbamboo.platform.sip.proxy;
 
 import java.net.URI;
 
+import org.lastbamboo.common.protocol.ReaderWriter;
 import org.lastbamboo.platform.sip.stack.message.Register;
-import org.lastbamboo.shoot.protocol.ReaderWriter;
 
 /**
  * Registrar for SIP clients.

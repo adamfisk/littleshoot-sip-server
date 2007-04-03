@@ -9,6 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.lastbamboo.common.protocol.CloseListener;
+import org.lastbamboo.common.protocol.ReaderWriter;
+import org.lastbamboo.common.protocol.ReaderWriterUtils;
 import org.lastbamboo.platform.sip.stack.message.Register;
 import org.lastbamboo.platform.sip.stack.message.SipMessage;
 import org.lastbamboo.platform.sip.stack.message.SipMessageFactory;
@@ -16,9 +19,6 @@ import org.lastbamboo.platform.sip.stack.message.SipMessageUtils;
 import org.lastbamboo.platform.sip.stack.message.header.SipHeader;
 import org.lastbamboo.platform.sip.stack.message.header.SipHeaderNames;
 import org.lastbamboo.platform.sip.stack.transport.SipTcpTransportLayer;
-import org.lastbamboo.shoot.protocol.CloseListener;
-import org.lastbamboo.shoot.protocol.ReaderWriter;
-import org.lastbamboo.shoot.protocol.ReaderWriterUtils;
 
 /**
  * Registrar for SIP clients.

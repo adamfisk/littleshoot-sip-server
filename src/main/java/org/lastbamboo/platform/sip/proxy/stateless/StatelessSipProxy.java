@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.lastbamboo.common.protocol.ReaderWriter;
+import org.lastbamboo.common.protocol.WriteData;
+import org.lastbamboo.common.protocol.WriteListener;
 import org.lastbamboo.platform.sip.proxy.SipRegistrar;
 import org.lastbamboo.platform.sip.proxy.SipRequestAndResponseForwarder;
 import org.lastbamboo.platform.sip.proxy.SipRequestForwarder;
@@ -16,9 +19,6 @@ import org.lastbamboo.platform.sip.stack.message.header.SipHeader;
 import org.lastbamboo.platform.sip.stack.message.header.SipHeaderNames;
 import org.lastbamboo.platform.sip.stack.transport.SipTcpTransportLayer;
 import org.lastbamboo.platform.sip.stack.util.UriUtils;
-import org.lastbamboo.shoot.protocol.ReaderWriter;
-import org.lastbamboo.shoot.protocol.WriteData;
-import org.lastbamboo.shoot.protocol.WriteListener;
 
 /**
  * Creates a new stateless SIP proxy.

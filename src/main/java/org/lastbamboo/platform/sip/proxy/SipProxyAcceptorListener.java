@@ -6,13 +6,13 @@ import java.nio.channels.SocketChannel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.lastbamboo.common.nio.AcceptorListener;
+import org.lastbamboo.common.nio.NioReaderWriter;
+import org.lastbamboo.common.nio.SelectorManager;
 import org.lastbamboo.platform.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.platform.sip.stack.message.SipMessageVisitor;
 import org.lastbamboo.platform.sip.stack.message.SipProtocolHandler;
 import org.lastbamboo.platform.sip.stack.transport.SipTcpTransportLayer;
-import org.lastbamboo.shoot.nio.AcceptorListener;
-import org.lastbamboo.shoot.nio.NioReaderWriter;
-import org.lastbamboo.shoot.nio.SelectorManager;
 import org.lastbamboo.shoot.protocol.ProtocolHandler;
 import org.lastbamboo.shoot.protocol.ReaderWriter;
 

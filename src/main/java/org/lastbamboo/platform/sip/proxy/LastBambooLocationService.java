@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.lastbamboo.netmap.IntUriNetMap;
+import org.lastbamboo.common.netmap.IntUriNetMap;
 import org.lastbamboo.platform.sip.stack.util.UriUtils;
 
 /**

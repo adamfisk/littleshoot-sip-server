@@ -11,10 +11,10 @@ import org.lastbamboo.common.nio.NioReaderWriter;
 import org.lastbamboo.common.nio.SelectorManager;
 import org.lastbamboo.common.protocol.ProtocolHandler;
 import org.lastbamboo.common.protocol.ReaderWriter;
-import org.lastbamboo.platform.sip.stack.message.SipMessageFactory;
-import org.lastbamboo.platform.sip.stack.message.SipMessageVisitor;
-import org.lastbamboo.platform.sip.stack.message.SipProtocolHandler;
-import org.lastbamboo.platform.sip.stack.transport.SipTcpTransportLayer;
+import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
+import org.lastbamboo.common.sip.stack.message.SipMessageVisitor;
+import org.lastbamboo.common.sip.stack.message.SipProtocolHandler;
+import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
 
 /**
  * Creates a new listener for accepted sockets to the SIP proxy server.  

@@ -3,7 +3,7 @@ package org.lastbamboo.common.sip.proxy;
 import java.net.URI;
 
 import org.lastbamboo.common.protocol.ReaderWriter;
-import org.lastbamboo.platform.sip.stack.message.Register;
+import org.lastbamboo.common.sip.stack.message.Register;
 
 /**
  * Registrar for SIP clients.

@@ -6,16 +6,16 @@ import java.net.InetSocketAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.lastbamboo.common.protocol.ReaderWriter;
-import org.lastbamboo.platform.sip.stack.message.Invite;
-import org.lastbamboo.platform.sip.stack.message.OkResponse;
-import org.lastbamboo.platform.sip.stack.message.Register;
-import org.lastbamboo.platform.sip.stack.message.RequestTimeoutResponse;
-import org.lastbamboo.platform.sip.stack.message.SipMessage;
-import org.lastbamboo.platform.sip.stack.message.SipMessageFactory;
-import org.lastbamboo.platform.sip.stack.message.SipMessageVisitor;
-import org.lastbamboo.platform.sip.stack.message.UnknownMessage;
-import org.lastbamboo.platform.sip.stack.message.header.SipHeader;
-import org.lastbamboo.platform.sip.stack.message.header.SipHeaderNames;
+import org.lastbamboo.common.sip.stack.message.Invite;
+import org.lastbamboo.common.sip.stack.message.OkResponse;
+import org.lastbamboo.common.sip.stack.message.Register;
+import org.lastbamboo.common.sip.stack.message.RequestTimeoutResponse;
+import org.lastbamboo.common.sip.stack.message.SipMessage;
+import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
+import org.lastbamboo.common.sip.stack.message.SipMessageVisitor;
+import org.lastbamboo.common.sip.stack.message.UnknownMessage;
+import org.lastbamboo.common.sip.stack.message.header.SipHeader;
+import org.lastbamboo.common.sip.stack.message.header.SipHeaderNames;
 
 /**
  * Visitor for visiting SIP message on the proxy.  This delegates to various

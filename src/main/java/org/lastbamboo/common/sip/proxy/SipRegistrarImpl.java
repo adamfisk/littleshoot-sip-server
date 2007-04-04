@@ -12,13 +12,13 @@ import org.apache.commons.logging.LogFactory;
 import org.lastbamboo.common.protocol.CloseListener;
 import org.lastbamboo.common.protocol.ReaderWriter;
 import org.lastbamboo.common.protocol.ReaderWriterUtils;
-import org.lastbamboo.platform.sip.stack.message.Register;
-import org.lastbamboo.platform.sip.stack.message.SipMessage;
-import org.lastbamboo.platform.sip.stack.message.SipMessageFactory;
-import org.lastbamboo.platform.sip.stack.message.SipMessageUtils;
-import org.lastbamboo.platform.sip.stack.message.header.SipHeader;
-import org.lastbamboo.platform.sip.stack.message.header.SipHeaderNames;
-import org.lastbamboo.platform.sip.stack.transport.SipTcpTransportLayer;
+import org.lastbamboo.common.sip.stack.message.Register;
+import org.lastbamboo.common.sip.stack.message.SipMessage;
+import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
+import org.lastbamboo.common.sip.stack.message.SipMessageUtils;
+import org.lastbamboo.common.sip.stack.message.header.SipHeader;
+import org.lastbamboo.common.sip.stack.message.header.SipHeaderNames;
+import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
 
 /**
  * Registrar for SIP clients.

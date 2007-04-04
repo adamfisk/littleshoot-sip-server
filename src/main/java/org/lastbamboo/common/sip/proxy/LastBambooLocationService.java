@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.lastbamboo.common.netmap.IntUriNetMap;
-import org.lastbamboo.platform.sip.stack.util.UriUtils;
+import org.lastbamboo.common.sip.stack.util.UriUtils;
 
 /**
  * A location service for dealing with Last Bamboo SIP URIs.

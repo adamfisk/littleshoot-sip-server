@@ -12,13 +12,13 @@ import org.lastbamboo.common.protocol.WriteListener;
 import org.lastbamboo.common.sip.proxy.SipRegistrar;
 import org.lastbamboo.common.sip.proxy.SipRequestAndResponseForwarder;
 import org.lastbamboo.common.sip.proxy.SipRequestForwarder;
-import org.lastbamboo.platform.sip.stack.message.SipMessage;
-import org.lastbamboo.platform.sip.stack.message.SipMessageFactory;
-import org.lastbamboo.platform.sip.stack.message.SipMessageUtils;
-import org.lastbamboo.platform.sip.stack.message.header.SipHeader;
-import org.lastbamboo.platform.sip.stack.message.header.SipHeaderNames;
-import org.lastbamboo.platform.sip.stack.transport.SipTcpTransportLayer;
-import org.lastbamboo.platform.sip.stack.util.UriUtils;
+import org.lastbamboo.common.sip.stack.message.SipMessage;
+import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
+import org.lastbamboo.common.sip.stack.message.SipMessageUtils;
+import org.lastbamboo.common.sip.stack.message.header.SipHeader;
+import org.lastbamboo.common.sip.stack.message.header.SipHeaderNames;
+import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
+import org.lastbamboo.common.sip.stack.util.UriUtils;
 
 /**
  * Creates a new stateless SIP proxy.

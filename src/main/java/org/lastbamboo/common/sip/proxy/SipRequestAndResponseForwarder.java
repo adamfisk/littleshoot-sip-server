@@ -2,7 +2,7 @@ package org.lastbamboo.common.sip.proxy;
 
 import java.io.IOException;
 
-import org.lastbamboo.platform.sip.stack.message.SipMessage;
+import org.lastbamboo.common.sip.stack.message.SipMessage;
 
 /**
  * Interface for classes that can forward SIP requests and responses.

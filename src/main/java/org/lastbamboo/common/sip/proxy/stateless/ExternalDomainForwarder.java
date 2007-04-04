@@ -1,8 +1,8 @@
-package org.lastbamboo.platform.sip.proxy.stateless;
+package org.lastbamboo.common.sip.proxy.stateless;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.lastbamboo.platform.sip.proxy.SipRequestForwarder;
+import org.lastbamboo.common.sip.proxy.SipRequestForwarder;
 import org.lastbamboo.platform.sip.stack.message.SipMessage;
 
 /**

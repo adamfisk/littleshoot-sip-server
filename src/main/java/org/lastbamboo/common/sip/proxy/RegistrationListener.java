@@ -1,4 +1,4 @@
-package org.lastbamboo.platform.sip.proxy;
+package org.lastbamboo.common.sip.proxy;
 
 import java.net.URI;
 

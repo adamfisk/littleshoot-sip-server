@@ -1,4 +1,4 @@
-package org.lastbamboo.platform.sip.proxy;
+package org.lastbamboo.common.sip.proxy;
 
 /**
  * Interface for a SIP proxy.

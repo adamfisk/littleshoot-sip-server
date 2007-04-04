@@ -1,4 +1,4 @@
-package org.lastbamboo.platform.sip.proxy.stateless;
+package org.lastbamboo.common.sip.proxy.stateless;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -18,11 +18,11 @@ import org.lastbamboo.common.protocol.ProtocolHandler;
 import org.lastbamboo.common.protocol.ReadWriteConnector;
 import org.lastbamboo.common.protocol.ReadWriteConnectorListener;
 import org.lastbamboo.common.protocol.ReaderWriter;
-import org.lastbamboo.platform.sip.proxy.LocationService;
-import org.lastbamboo.platform.sip.proxy.SipProxyMessageVisitor;
-import org.lastbamboo.platform.sip.proxy.SipRegistrar;
-import org.lastbamboo.platform.sip.proxy.SipRequestAndResponseForwarder;
-import org.lastbamboo.platform.sip.proxy.SipRequestForwarder;
+import org.lastbamboo.common.sip.proxy.LocationService;
+import org.lastbamboo.common.sip.proxy.SipProxyMessageVisitor;
+import org.lastbamboo.common.sip.proxy.SipRegistrar;
+import org.lastbamboo.common.sip.proxy.SipRequestAndResponseForwarder;
+import org.lastbamboo.common.sip.proxy.SipRequestForwarder;
 import org.lastbamboo.platform.sip.stack.message.SipMessage;
 import org.lastbamboo.platform.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.platform.sip.stack.message.SipMessageUtils;

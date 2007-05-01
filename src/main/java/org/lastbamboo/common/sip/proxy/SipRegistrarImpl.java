@@ -47,7 +47,6 @@ public class SipRegistrarImpl implements SipRegistrar, CloseListener
      * @param factory The factory for creating messages for responding to
      * register requests.
      * @param transportLayer The transport layer for actually sending data.
-     * @param listener Class listening for registration events.
      */
     public SipRegistrarImpl(final SipMessageFactory factory, 
         final SipTcpTransportLayer transportLayer)

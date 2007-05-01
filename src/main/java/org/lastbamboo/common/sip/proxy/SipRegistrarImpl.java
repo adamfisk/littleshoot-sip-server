@@ -77,8 +77,9 @@ public class SipRegistrarImpl implements SipRegistrar, CloseListener
         final InetSocketAddress remoteAddress = 
             readerWriter.getRemoteSocketAddress();
         LOG.debug("Writing OK response to SIP client...");
-        notifyListeners(uri, true);
+        
         this.m_transportLayer.writeResponse(remoteAddress, response);
+        notifyListeners(uri, true);
         }
 
     public ReaderWriter getReaderWriter(final URI uri)
@@ -99,6 +100,10 @@ public class SipRegistrarImpl implements SipRegistrar, CloseListener
         if (uri != null)
             {
             notifyListeners(uri, false);
+            }
+        else
+            {
+            LOG.warn("Could not locate URI for reader/writer: "+readerWriter);
             }
         }
     

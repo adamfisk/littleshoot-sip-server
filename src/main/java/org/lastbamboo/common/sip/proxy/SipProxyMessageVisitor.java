@@ -125,7 +125,7 @@ public class SipProxyMessageVisitor implements SipMessageVisitor
     
     public void visitUnknownRequest(final UnknownMessage request)
         {
-        LOG.warn("Visiting unknown request: "+request);
-        this.m_proxy.forwardSipRequest(request);
+        LOG.warn("Visiting and ignoring unknown request: "+request);
+        //this.m_proxy.forwardSipRequest(request);
         }
     }

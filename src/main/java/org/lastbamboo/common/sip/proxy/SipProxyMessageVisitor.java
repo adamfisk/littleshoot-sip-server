@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.lastbamboo.common.protocol.ReaderWriter;
+import org.lastbamboo.common.sip.stack.message.DoubleCrlfKeepAlive;
 import org.lastbamboo.common.sip.stack.message.Invite;
 import org.lastbamboo.common.sip.stack.message.OkResponse;
 import org.lastbamboo.common.sip.stack.message.Register;
@@ -116,6 +117,19 @@ public class SipProxyMessageVisitor implements SipMessageVisitor
         {
         LOG.debug("Visiting register...");
         this.m_registrar.handleRegister(register, this.m_readerWriter);
+        }
+    
+    public void visitDoubleCrlfKeepAlive(final DoubleCrlfKeepAlive keepAlive)
+        {
+        if (LOG.isDebugEnabled())
+            {
+            LOG.debug("Visiting double CRLF");
+            }
+        
+        // TODO: Do nothing for now.  We should return with a single CRLF, as 
+        // that would verify to the client that the flow's alive, but that's not
+        // really our purpose.  We're just verifying the connection still 
+        // exists.
         }
     
     public void visitRequestTimedOut(final RequestTimeoutResponse response)

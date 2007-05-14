@@ -102,7 +102,9 @@ public class SipRegistrarImpl implements SipRegistrar, CloseListener
             }
         else
             {
-            LOG.warn("Could not locate URI for reader/writer: "+readerWriter);
+            // Maybe we've received duplicate close events?  Strange.
+            LOG.warn("Could not locate URI for reader/writer: " + 
+                readerWriter + " " + this.m_registrations.keySet());
             }
         }
     

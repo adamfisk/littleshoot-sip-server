@@ -2,6 +2,7 @@ package org.lastbamboo.common.sip.proxy;
 
 import java.net.URI;
 
+import org.apache.mina.common.IoSession;
 import org.lastbamboo.common.protocol.ReaderWriter;
 import org.lastbamboo.common.sip.stack.message.Register;
 
@@ -15,9 +16,9 @@ public interface SipRegistrar
      * Processes the specified register request.
      * 
      * @param register The register request to process.
-     * @param writer The class for writing message back to the client.
+     * @param io The class for writing message back to the client.
      */
-    void handleRegister(final Register register, final ReaderWriter writer);
+    void handleRegister(Register register, IoSession io);
 
     /**
      * Accesses the reader/writer for sending a message to the specified URI.
@@ -26,7 +27,9 @@ public interface SipRegistrar
      * @return The reader/writer for the specified URI, or <code>null</code>
      * if we don't have information about the URI.
      */
-    ReaderWriter getReaderWriter(final URI uri);
+    IoSession getIoSession(final URI uri);
+    
+    void sessionClosed(final IoSession session);
 
     /**
      * Determines whether or not we have a registration for the specified

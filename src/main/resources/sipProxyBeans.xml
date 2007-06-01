@@ -4,15 +4,6 @@
 <beans>
 
     <!--
-        The NIO selector for the SIP server.
-    -->
-    <bean id="sipSelectorManager"
-          class="org.lastbamboo.common.nio.SelectorManagerImpl"
-          >
-          <constructor-arg><value>SIP-proxy</value></constructor-arg>
-          </bean>
-
-    <!--
         The SIP registrar.
     -->
     <bean id="sipRegistrar"
@@ -47,7 +38,6 @@
     	  class="org.lastbamboo.common.sip.proxy.stateless.UnregisteredUriForwarder">
     	  <constructor-arg><ref local="locationServiceChain"/></constructor-arg>
     	  <constructor-arg><ref bean="sipTransportLayer"/></constructor-arg>
-    	  <constructor-arg><ref local="sipSelectorManager"/></constructor-arg>
     	  <constructor-arg><ref bean="uriUtils"/></constructor-arg>
     	  <constructor-arg><ref bean="sipMessageFactory"/></constructor-arg>
     	  <constructor-arg><ref local="sipRegistrar"/></constructor-arg>
@@ -69,21 +59,13 @@
         <constructor-arg><ref bean="uriUtils"/></constructor-arg>
         <constructor-arg><ref bean="sipMessageFactory"/></constructor-arg>
         </bean>
-
-    <bean id="sipAcceptorListener"
-    	  class="org.lastbamboo.common.sip.proxy.SipProxyAcceptorListener">
-        <constructor-arg><ref local="sipSelectorManager"/></constructor-arg>
-        <constructor-arg ref="sipMessageFactory"/>
+        
+    <bean id="sipServer"
+        class="org.lastbamboo.common.sip.server.SipProxyImpl">
+        <constructor-arg><ref local="statelessSipProxy"/></constructor-arg>
         <constructor-arg><ref local="sipRegistrar"/></constructor-arg>
-    	<constructor-arg><ref local="statelessSipProxy"/></constructor-arg>
+        <constructor-arg ref="sipHeaderFactory"/>
+        <constructor-arg ref="sipMessageFactory"/>
         <constructor-arg ref="sipTransportLayer"/>
-    	</bean>
-
-
-
-  	<bean id="sipProxy"
-  		  class="org.lastbamboo.common.sip.proxy.SipProxyImpl">
-  		<constructor-arg><ref local="sipSelectorManager"/></constructor-arg>
-        <constructor-arg><ref local="sipAcceptorListener"/></constructor-arg>
-  		</bean>
+        </bean>
 </beans>

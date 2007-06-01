@@ -12,22 +12,17 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.lastbamboo.common.nio.ReadWriteConnectorImpl;
-import org.lastbamboo.common.nio.SelectorManager;
-import org.lastbamboo.common.protocol.ProtocolHandler;
-import org.lastbamboo.common.protocol.ReadWriteConnector;
 import org.lastbamboo.common.protocol.ReadWriteConnectorListener;
 import org.lastbamboo.common.protocol.ReaderWriter;
 import org.lastbamboo.common.sip.proxy.LocationService;
-import org.lastbamboo.common.sip.proxy.SipProxyMessageVisitor;
 import org.lastbamboo.common.sip.proxy.SipRegistrar;
 import org.lastbamboo.common.sip.proxy.SipRequestAndResponseForwarder;
 import org.lastbamboo.common.sip.proxy.SipRequestForwarder;
+import org.lastbamboo.common.sip.stack.message.Invite;
 import org.lastbamboo.common.sip.stack.message.SipMessage;
 import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageUtils;
-import org.lastbamboo.common.sip.stack.message.SipMessageVisitor;
-import org.lastbamboo.common.sip.stack.message.SipProtocolHandler;
+import org.lastbamboo.common.sip.stack.message.SipResponse;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
 import org.lastbamboo.common.sip.stack.util.UriUtils;
 import org.springframework.beans.BeansException;
@@ -51,8 +46,6 @@ public class UnregisteredUriForwarder implements SipRequestForwarder,
 
     private final SipTcpTransportLayer m_transportLayer;
 
-    private final SelectorManager m_selector;
-
     private final UriUtils m_uriUtils;
 
     private final SipMessageFactory m_messageFactory;
@@ -70,7 +63,6 @@ public class UnregisteredUriForwarder implements SipRequestForwarder,
      * @param locationService The SIP location service for handling requests
      * this proxy has no registration data for.
      * @param transportLayer The transport layer for sending messages.
-     * @param selector The selector for connecting to external hosts.
      * @param uriUtils Utilities for manipulating URIs.
      * @param messageFactory Factory for creating responses.
      * @param registrar Reference to the registrar for when we have to create
@@ -79,24 +71,18 @@ public class UnregisteredUriForwarder implements SipRequestForwarder,
      */
     public UnregisteredUriForwarder(final LocationService locationService,
         final SipTcpTransportLayer transportLayer,
-        final SelectorManager selector, final UriUtils uriUtils,
+        final UriUtils uriUtils,
         final SipMessageFactory messageFactory,
         final SipRegistrar registrar) 
         {
         this.m_locationService = locationService;
         this.m_transportLayer = transportLayer;
-        this.m_selector = selector;
         this.m_uriUtils = uriUtils;
         this.m_messageFactory = messageFactory;
         this.m_registrar = registrar;
         }
-
-    public void setProxy(final SipRequestAndResponseForwarder proxy)
-        {
-        this.m_proxy = proxy;
-        }
     
-    public void forwardSipRequest(final SipMessage request)
+    public void forwardSipRequest(final Invite request)
         {
         if (this.m_proxy == null)
             {
@@ -130,7 +116,7 @@ public class UnregisteredUriForwarder implements SipRequestForwarder,
         this.m_executor.execute(runner);
         }
 
-    private void forwardSipRequest(final URI uri, final SipMessage request) 
+    private void forwardSipRequest(final URI uri, final Invite request) 
         {
         if (LOG.isDebugEnabled())
             {
@@ -185,7 +171,7 @@ public class UnregisteredUriForwarder implements SipRequestForwarder,
             }
         }
 
-    private void sendRequestTimeout(final SipMessage request)
+    private void sendRequestTimeout(final Invite request)
         {
         final InetSocketAddress socketAddress;
         try
@@ -199,13 +185,13 @@ public class UnregisteredUriForwarder implements SipRequestForwarder,
             // Nothing we can do other than try to extract the Via.
             return;
             }
-        final SipMessage requestTimeout = 
+        final SipResponse requestTimeout = 
             this.m_messageFactory.createRequestTimeoutResponse(request);
         this.m_transportLayer.writeResponse(socketAddress, requestTimeout);
         }
 
     private boolean connectToAnyTargetAndSendRequest(
-        final Collection targetUris, final SipMessage request)
+        final Collection targetUris, final Invite request)
         {
         LOG.debug("Attempting to connect to " + targetUris.size() + " URIs...");
         // Loop through and use the first URI we're able to connect to.
@@ -237,8 +223,15 @@ public class UnregisteredUriForwarder implements SipRequestForwarder,
         final InetSocketAddress target, final SipMessage request) 
         throws IOException
         {
-        LOG.debug("Connecting to external URI: "+target);
+        if (LOG.isDebugEnabled())
+            {
+            LOG.debug("Connecting to external URI: "+target);
+            }
         
+        // TODO: We need to implement this with MINA.
+        return true;
+        
+        /*
         final SipProxyConnectListener listener = 
             new SipProxyConnectListener();
         final ReadWriteConnector connector = 
@@ -289,6 +282,7 @@ public class UnregisteredUriForwarder implements SipRequestForwarder,
                 return true;
                 }
             }
+            */
         }
 
     private static final class SipProxyConnectListener 

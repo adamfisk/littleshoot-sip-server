@@ -1,6 +1,6 @@
 package org.lastbamboo.common.sip.proxy;
 
-import org.lastbamboo.common.sip.stack.message.SipMessage;
+import org.lastbamboo.common.sip.stack.message.Invite;
 
 /**
  * Interface for classes that forward SIP requests.
@@ -13,6 +13,6 @@ public interface SipRequestForwarder
      * 
      * @param request The request to forward.
      */
-    void forwardSipRequest(final SipMessage request);
+    void forwardSipRequest(final Invite request);
     
     }

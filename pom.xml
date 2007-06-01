@@ -16,6 +16,12 @@
         </parent>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.apache.mina</groupId>
+            <artifactId>mina-core</artifactId>
+            </dependency>
+
         <dependency>
             <groupId>org.lastbamboo</groupId>
             <artifactId>lastbamboo-common-netmap</artifactId>
@@ -30,7 +36,7 @@
             <groupId>org.lastbamboo</groupId>
             <artifactId>lastbamboo-common-sip-stack</artifactId>
             </dependency>
-
+            
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>

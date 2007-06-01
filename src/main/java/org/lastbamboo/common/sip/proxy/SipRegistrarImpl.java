@@ -9,16 +9,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.mina.common.IoFilterAdapter;
+import org.apache.mina.common.IoSession;
+import org.apache.mina.common.IoFilter.NextFilter;
 import org.lastbamboo.common.protocol.CloseListener;
 import org.lastbamboo.common.protocol.ReaderWriter;
-import org.lastbamboo.common.protocol.ReaderWriterUtils;
 import org.lastbamboo.common.sip.stack.message.Register;
 import org.lastbamboo.common.sip.stack.message.SipMessage;
 import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageUtils;
+import org.lastbamboo.common.sip.stack.message.SipResponse;
 import org.lastbamboo.common.sip.stack.message.header.SipHeader;
 import org.lastbamboo.common.sip.stack.message.header.SipHeaderNames;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
+import org.lastbamboo.common.util.MapUtils;
 
 /**
  * Registrar for SIP clients.
@@ -26,7 +30,7 @@ import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
  * TODO: Also create a map of reader/writers to SIP URIs for more efficient
  * removals??
  */
-public class SipRegistrarImpl implements SipRegistrar, CloseListener
+public class SipRegistrarImpl implements SipRegistrar 
     {
 
     private static final Log LOG = LogFactory.getLog(SipRegistrarImpl.class);
@@ -35,8 +39,8 @@ public class SipRegistrarImpl implements SipRegistrar, CloseListener
 
     private final SipTcpTransportLayer m_transportLayer;
     
-    private final Map<URI, ReaderWriter> m_registrations = 
-        new ConcurrentHashMap<URI, ReaderWriter>();
+    private final Map<URI, IoSession> m_registrations = 
+        new ConcurrentHashMap<URI, IoSession>();
 
     private final Collection<RegistrationListener> m_registrationListeners =
         new LinkedList<RegistrationListener>();
@@ -55,6 +59,7 @@ public class SipRegistrarImpl implements SipRegistrar, CloseListener
         this.m_transportLayer = transportLayer;
         }
     
+    /*
     public void handleRegister(final Register register, 
         final ReaderWriter readerWriter)
         {
@@ -80,8 +85,30 @@ public class SipRegistrarImpl implements SipRegistrar, CloseListener
         this.m_transportLayer.writeResponse(remoteAddress, response);
         notifyListeners(uri, true);
         }
+        */
+    
+    public void handleRegister(final Register register, final IoSession session)
+        {
+        LOG.debug("Processing registration...");
+        //readerWriter.addCloseListener(this);
+        
+        // We also need to add a mapping according to the URI.
+        final SipHeader fromHeader = register.getHeader(SipHeaderNames.FROM);
+        final URI uri = SipMessageUtils.extractUri(fromHeader);
+        this.m_registrations.put(uri, session);
+        
+        final SipResponse response = 
+            this.m_messageFactory.createRegisterOk(register);
+        
+        final InetSocketAddress remoteAddress = 
+            (InetSocketAddress) session.getRemoteAddress();
+        LOG.debug("Writing OK response to SIP client...");
+        
+        this.m_transportLayer.writeResponse(remoteAddress, response);
+        notifyListeners(uri, true);
+        }
 
-    public ReaderWriter getReaderWriter(final URI uri)
+    public IoSession getIoSession(final URI uri)
         {
         return this.m_registrations.get(uri);
         }
@@ -91,11 +118,11 @@ public class SipRegistrarImpl implements SipRegistrar, CloseListener
         return this.m_registrations.containsKey(uri);
         }
 
-    public void onClose(final ReaderWriter readerWriter)
+    public void sessionClosed(final IoSession session) 
         {
         final URI uri = 
-            (URI) ReaderWriterUtils.removeFromMapValues(this.m_registrations, 
-            readerWriter);
+            (URI) MapUtils.removeFromMapValues(this.m_registrations, 
+                session);
         if (uri != null)
             {
             notifyListeners(uri, false);
@@ -104,7 +131,7 @@ public class SipRegistrarImpl implements SipRegistrar, CloseListener
             {
             // Maybe we've received duplicate close events?  Strange.
             LOG.warn("Could not locate URI for reader/writer: " + 
-                readerWriter + " " + this.m_registrations.keySet());
+                session + " " + this.m_registrations.keySet());
             }
         }
     
@@ -134,4 +161,5 @@ public class SipRegistrarImpl implements SipRegistrar, CloseListener
         LOG.debug("Adding registration listener...");
         this.m_registrationListeners.add(listener);
         }
+
     }

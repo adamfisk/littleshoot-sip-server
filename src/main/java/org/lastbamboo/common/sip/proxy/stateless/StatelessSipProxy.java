@@ -6,17 +6,19 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.lastbamboo.common.protocol.ReaderWriter;
+import org.apache.mina.common.IoSession;
 import org.lastbamboo.common.protocol.WriteData;
 import org.lastbamboo.common.protocol.WriteListener;
 import org.lastbamboo.common.sip.proxy.SipRegistrar;
 import org.lastbamboo.common.sip.proxy.SipRequestAndResponseForwarder;
 import org.lastbamboo.common.sip.proxy.SipRequestForwarder;
-import org.lastbamboo.common.sip.stack.message.SipMessage;
+import org.lastbamboo.common.sip.stack.message.Invite;
 import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageUtils;
+import org.lastbamboo.common.sip.stack.message.SipResponse;
 import org.lastbamboo.common.sip.stack.message.header.SipHeader;
 import org.lastbamboo.common.sip.stack.message.header.SipHeaderNames;
+import org.lastbamboo.common.sip.stack.message.header.SipHeaderValue;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
 import org.lastbamboo.common.sip.stack.util.UriUtils;
 
@@ -69,11 +71,11 @@ public class StatelessSipProxy implements SipRequestAndResponseForwarder,
         this.m_messageFactory = messageFactory;
         }
     
-    public void forwardSipRequest(final SipMessage request)
+    public void forwardSipRequest(final Invite request)
         {
         if (LOG.isDebugEnabled())
             {
-            LOG.debug("Processing request: "+request.getMethod());
+            LOG.debug("Processing request...");
             }
         // Determine request targets, as specified in RFC 3261 section 16.5.
         
@@ -98,10 +100,9 @@ public class StatelessSipProxy implements SipRequestAndResponseForwarder,
             // service.
             if (this.m_registrar.hasRegistration(uri))
                 {
-                final ReaderWriter readerWriter = 
-                    this.m_registrar.getReaderWriter(uri);
+                final IoSession io = this.m_registrar.getIoSession(uri);
                 
-                if (readerWriter == null) 
+                if (io == null) 
                     {
                     // This can still happen if we happen to lose a 
                     // connection...
@@ -112,15 +113,16 @@ public class StatelessSipProxy implements SipRequestAndResponseForwarder,
                 else 
                     {
                     LOG.debug("Forwarding message for client we have...");
-                    this.m_transportLayer.writeRequestStatelessly(request, 
-                        readerWriter);
+                    this.m_transportLayer.writeRequestStatelessly(request, io);
                     }
                 }
             else 
                 {
                 LOG.debug("Forwarding request for user not registered " +
                     "with this proxy...");
-                this.m_unregisteredUriForwarder.forwardSipRequest(request);
+                
+                // TODO: We don't do this for now.
+                //this.m_unregisteredUriForwarder.forwardSipRequest(request);
                 }
             }
         else
@@ -132,16 +134,16 @@ public class StatelessSipProxy implements SipRequestAndResponseForwarder,
             }     
         }
 
-    public void forwardSipResponse(final SipMessage originalResponse) 
+    public void forwardSipResponse(final SipResponse originalResponse) 
         throws IOException
         {
         if (LOG.isDebugEnabled())
             {
-            LOG.debug("Processing message: "+originalResponse);
+            LOG.debug("Forwarding original respone: "+originalResponse);
             }
         final SipHeader header = 
             originalResponse.getHeader(SipHeaderNames.VIA);
-        final List values = header.getValues();
+        final List<SipHeaderValue> values = header.getValues();
         if (values.size() < 2)
             {
             LOG.warn("Not enough Via headers in response: "+
@@ -150,7 +152,7 @@ public class StatelessSipProxy implements SipRequestAndResponseForwarder,
                 "in response: "+originalResponse);
             }
 
-        final SipMessage response = 
+        final SipResponse response = 
             this.m_messageFactory.stripVia(originalResponse);
 
         this.m_transportLayer.writeResponse(response);

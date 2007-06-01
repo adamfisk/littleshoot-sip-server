@@ -61,7 +61,7 @@
         </bean>
         
     <bean id="sipServer"
-        class="org.lastbamboo.common.sip.server.SipProxyImpl">
+        class="org.lastbamboo.common.sip.proxy.SipProxyImpl">
         <constructor-arg><ref local="statelessSipProxy"/></constructor-arg>
         <constructor-arg><ref local="sipRegistrar"/></constructor-arg>
         <constructor-arg ref="sipHeaderFactory"/>

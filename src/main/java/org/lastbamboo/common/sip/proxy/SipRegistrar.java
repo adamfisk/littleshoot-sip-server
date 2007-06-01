@@ -3,7 +3,6 @@ package org.lastbamboo.common.sip.proxy;
 import java.net.URI;
 
 import org.apache.mina.common.IoSession;
-import org.lastbamboo.common.protocol.ReaderWriter;
 import org.lastbamboo.common.sip.stack.message.Register;
 
 /**
@@ -27,9 +26,15 @@ public interface SipRegistrar
      * @return The reader/writer for the specified URI, or <code>null</code>
      * if we don't have information about the URI.
      */
-    IoSession getIoSession(final URI uri);
+    IoSession getIoSession(URI uri);
     
-    void sessionClosed(final IoSession session);
+    /**
+     * Called when an IO session has closed -- we have lost a connection to a 
+     * client.
+     * 
+     * @param session The closed session.
+     */
+    void sessionClosed(IoSession session);
 
     /**
      * Determines whether or not we have a registration for the specified

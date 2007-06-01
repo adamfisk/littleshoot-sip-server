@@ -9,13 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.mina.common.IoFilterAdapter;
 import org.apache.mina.common.IoSession;
-import org.apache.mina.common.IoFilter.NextFilter;
-import org.lastbamboo.common.protocol.CloseListener;
-import org.lastbamboo.common.protocol.ReaderWriter;
 import org.lastbamboo.common.sip.stack.message.Register;
-import org.lastbamboo.common.sip.stack.message.SipMessage;
 import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageUtils;
 import org.lastbamboo.common.sip.stack.message.SipResponse;
@@ -59,38 +54,9 @@ public class SipRegistrarImpl implements SipRegistrar
         this.m_transportLayer = transportLayer;
         }
     
-    /*
-    public void handleRegister(final Register register, 
-        final ReaderWriter readerWriter)
-        {
-        LOG.debug("Processing registration...");
-        readerWriter.addCloseListener(this);
-        
-        
-        // Add a mapping at the transport layer.
-        //this.m_transportLayer.addConnection(readerWriter);
-        
-        // We also need to add a mapping according to the URI.
-        final SipHeader fromHeader = register.getHeader(SipHeaderNames.FROM);
-        final URI uri = SipMessageUtils.extractUri(fromHeader);
-        this.m_registrations.put(uri, readerWriter);
-        
-        final SipMessage response = 
-            this.m_messageFactory.createRegisterOk(register);
-        
-        final InetSocketAddress remoteAddress = 
-            readerWriter.getRemoteSocketAddress();
-        LOG.debug("Writing OK response to SIP client...");
-        
-        this.m_transportLayer.writeResponse(remoteAddress, response);
-        notifyListeners(uri, true);
-        }
-        */
-    
     public void handleRegister(final Register register, final IoSession session)
         {
         LOG.debug("Processing registration...");
-        //readerWriter.addCloseListener(this);
         
         // We also need to add a mapping according to the URI.
         final SipHeader fromHeader = register.getHeader(SipHeaderNames.FROM);

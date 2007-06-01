@@ -7,8 +7,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.IoSession;
-import org.lastbamboo.common.protocol.WriteData;
-import org.lastbamboo.common.protocol.WriteListener;
 import org.lastbamboo.common.sip.proxy.SipRegistrar;
 import org.lastbamboo.common.sip.proxy.SipRequestAndResponseForwarder;
 import org.lastbamboo.common.sip.proxy.SipRequestForwarder;
@@ -25,8 +23,7 @@ import org.lastbamboo.common.sip.stack.util.UriUtils;
 /**
  * Creates a new stateless SIP proxy.
  */
-public class StatelessSipProxy implements SipRequestAndResponseForwarder, 
-    WriteListener
+public class StatelessSipProxy implements SipRequestAndResponseForwarder
     {
 
     private static final Log LOG = 
@@ -157,20 +154,4 @@ public class StatelessSipProxy implements SipRequestAndResponseForwarder,
 
         this.m_transportLayer.writeResponse(response);
         }
-
-    public void onWrite(final WriteData data)
-        {
-        if (LOG.isDebugEnabled())
-            {
-            final long time = System.currentTimeMillis()-data.getStartTime();
-            LOG.debug("Completed write of "+data.getTotalBytes()+" bytes in "+
-                time + " milliseconds...");
-            if (time > 4000)
-                {
-                LOG.warn("Writing took "+time+" milliseconds..." + 
-                    data.getNumQueued()+" messages queued...");
-                }
-            }
-        }
-
     }

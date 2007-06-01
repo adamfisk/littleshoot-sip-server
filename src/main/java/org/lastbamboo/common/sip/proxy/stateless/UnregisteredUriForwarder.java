@@ -12,8 +12,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.lastbamboo.common.protocol.ReadWriteConnectorListener;
-import org.lastbamboo.common.protocol.ReaderWriter;
+
 import org.lastbamboo.common.sip.proxy.LocationService;
 import org.lastbamboo.common.sip.proxy.SipRegistrar;
 import org.lastbamboo.common.sip.proxy.SipRequestAndResponseForwarder;
@@ -26,15 +25,14 @@ import org.lastbamboo.common.sip.stack.message.SipResponse;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
 import org.lastbamboo.common.sip.stack.util.UriUtils;
 import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+//import org.springframework.context.ApplicationContext;
+//import org.springframework.context.ApplicationContextAware;
 
 /**
  * This class is responsible for forwarding messages to URIs we do not have
  * registration data for.
  */
-public class UnregisteredUriForwarder implements SipRequestForwarder, 
-    ApplicationContextAware 
+public class UnregisteredUriForwarder implements SipRequestForwarder
     {
 
     private static final Log LOG = 
@@ -54,7 +52,7 @@ public class UnregisteredUriForwarder implements SipRequestForwarder,
 
     private final SipRegistrar m_registrar;
 
-    private ApplicationContext m_applicationContext;
+    //private ApplicationContext m_applicationContext;
 
     /**
      * Creates a new class for forwarding URIs we don't have registration data
@@ -84,6 +82,7 @@ public class UnregisteredUriForwarder implements SipRequestForwarder,
     
     public void forwardSipRequest(final Invite request)
         {
+        /*
         if (this.m_proxy == null)
             {
             this.m_proxy = 
@@ -114,6 +113,7 @@ public class UnregisteredUriForwarder implements SipRequestForwarder,
                 }     
             };
         this.m_executor.execute(runner);
+        */
         }
 
     private void forwardSipRequest(final URI uri, final Invite request) 
@@ -285,50 +285,11 @@ public class UnregisteredUriForwarder implements SipRequestForwarder,
             */
         }
 
-    private static final class SipProxyConnectListener 
-        implements ReadWriteConnectorListener
-        {
-        private boolean m_determinedStatus;
-        private ReaderWriter m_readerWriter;
-
-        public void onConnect(final ReaderWriter readerWriter) 
-            throws IOException
-            {
-            LOG.debug("Connected to proxy: "+readerWriter);
-            synchronized (this)
-                {
-                this.m_determinedStatus = true;
-                this.m_readerWriter = readerWriter;
-                this.notifyAll();
-                }
-            }
-    
-        private ReaderWriter getReaderWriter()
-            {
-            return m_readerWriter;
-            }
-
-        private boolean hasDeterminedStatus()
-            {
-            return this.m_determinedStatus;
-            }
-
-        public void onConnectFailed(final InetSocketAddress socketAddress)
-            {
-            LOG.warn("Could not connect to other proxy: "+socketAddress);
-            // TODO: We need to send an error back to the client!!
-            
-            synchronized (this)
-                {
-                this.m_determinedStatus = true;
-                this.notifyAll();
-                }
-            }
-        }
-
+    /*
     public void setApplicationContext(final ApplicationContext ac) 
         throws BeansException
         {
         this.m_applicationContext = ac;
         }
+        */
     }

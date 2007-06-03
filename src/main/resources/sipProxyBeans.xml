@@ -60,7 +60,7 @@
         <constructor-arg><ref bean="sipMessageFactory"/></constructor-arg>
         </bean>
         
-    <bean id="sipProxy""
+    <bean id="sipProxy"
         class="org.lastbamboo.common.sip.proxy.SipProxyImpl">
         <constructor-arg><ref local="statelessSipProxy"/></constructor-arg>
         <constructor-arg><ref local="sipRegistrar"/></constructor-arg>

@@ -24,9 +24,6 @@ import org.lastbamboo.common.sip.stack.message.SipMessageUtils;
 import org.lastbamboo.common.sip.stack.message.SipResponse;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
 import org.lastbamboo.common.sip.stack.util.UriUtils;
-import org.springframework.beans.BeansException;
-//import org.springframework.context.ApplicationContext;
-//import org.springframework.context.ApplicationContextAware;
 
 /**
  * This class is responsible for forwarding messages to URIs we do not have

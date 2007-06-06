@@ -83,8 +83,6 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         
         acceptor.addListener(this);
 
-        // TODO: Add a filter for double CRLF messages!!
-        
         final ProtocolCodecFactory codecFactory = 
             new SipCodecFactory(m_sipHeaderFactory);
         acceptor.getFilterChain().addLast(

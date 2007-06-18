@@ -9,14 +9,17 @@ import java.util.concurrent.Executors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.common.DefaultIoFilterChainBuilder;
 import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoService;
 import org.apache.mina.common.IoServiceConfig;
 import org.apache.mina.common.IoServiceListener;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.common.SimpleByteBufferAllocator;
+import org.apache.mina.common.ThreadModel;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
 import org.lastbamboo.common.sip.stack.codec.SipCodecFactory;
@@ -81,36 +84,28 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         final Executor threadPool = Executors.newCachedThreadPool();
         final SocketAcceptor acceptor = new SocketAcceptor(
             Runtime.getRuntime().availableProcessors() + 1, threadPool);
+        final IoServiceConfig acceptorConfig = acceptor.getDefaultConfig();
+        acceptorConfig.setThreadModel(ThreadModel.MANUAL);
         
         final SocketAcceptorConfig cfg = new SocketAcceptorConfig();
         cfg.getSessionConfig().setReuseAddress(true);
         
         acceptor.addListener(this);
-
+        
         final ProtocolCodecFactory codecFactory = 
             new SipCodecFactory(m_sipHeaderFactory);
-        cfg.getFilterChain().addLast(
-            "codec", new ProtocolCodecFilter(codecFactory));
+        final DefaultIoFilterChainBuilder filterChainBuilder = 
+            cfg.getFilterChain();
+        filterChainBuilder.addLast("codec", 
+            new ProtocolCodecFilter(codecFactory));
+        filterChainBuilder.addLast("threadPool", 
+            new ExecutorFilter(Executors.newCachedThreadPool()));
 
-        /*
-        acceptor.setReuseAddress(true);
-        acceptor.getSessionConfig().setReuseAddress(true);
-        acceptor.getSessionConfig().setReceiveBufferSize(1024);
-        acceptor.getSessionConfig().setSendBufferSize(1024);
-        //((SocketSessionConfig) acceptor.getSessionConfig()).setTcpNoDelay(true);
-        //acceptor.getSessionConfig().setSoLinger(-1);
-        acceptor.setBacklog(10240);
-        
-        acceptor.setLocalAddress(new InetSocketAddress(SIP_PORT));
-        */
-        
         final SipMessageVisitorFactory visitorFactory = 
             new SipProxyMessageVisitorFactory(m_forwarder, m_registrar, 
                 m_sipMessageFactory);
         
         final IoHandler handler = new SipIoHandler(visitorFactory);
-        
-        //acceptor.setHandler(handler);
         
         try
             {

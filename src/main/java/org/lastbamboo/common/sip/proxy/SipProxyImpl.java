@@ -18,6 +18,7 @@ import org.apache.mina.common.SimpleByteBufferAllocator;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
+import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
 import org.lastbamboo.common.sip.stack.codec.SipCodecFactory;
 import org.lastbamboo.common.sip.stack.codec.SipIoHandler;
 import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
@@ -81,11 +82,14 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         final SocketAcceptor acceptor = new SocketAcceptor(
             Runtime.getRuntime().availableProcessors() + 1, threadPool);
         
+        final SocketAcceptorConfig cfg = new SocketAcceptorConfig();
+        cfg.getSessionConfig().setReuseAddress(true);
+        
         acceptor.addListener(this);
 
         final ProtocolCodecFactory codecFactory = 
             new SipCodecFactory(m_sipHeaderFactory);
-        acceptor.getFilterChain().addLast(
+        cfg.getFilterChain().addLast(
             "codec", new ProtocolCodecFilter(codecFactory));
 
         /*
@@ -110,22 +114,12 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         
         try
             {
-            acceptor.bind(new InetSocketAddress(SIP_PORT), handler);
+            acceptor.bind(new InetSocketAddress(SIP_PORT), handler, cfg);
             }
         catch (final IOException e)
             {
             LOG.error("Could not bind!!", e);
             }
-        }
-
-    public void serviceActivated(final IoService service)
-        {
-        LOG.debug("Service activated!! "+service);
-        }
-
-    public void serviceDeactivated(final IoService service)
-        {
-        LOG.debug("Service deactivated!! "+service);
         }
 
     public void sessionCreated(final IoSession session)

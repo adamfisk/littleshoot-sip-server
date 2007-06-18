@@ -19,7 +19,7 @@ import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.lastbamboo.common.sip.stack.codec.SipCodecFactory;
-import org.lastbamboo.common.sip.stack.codec.SipProtocolHandler;
+import org.lastbamboo.common.sip.stack.codec.SipIoHandler;
 import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageVisitorFactory;
 import org.lastbamboo.common.sip.stack.message.header.SipHeaderFactory;
@@ -104,7 +104,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
             new SipProxyMessageVisitorFactory(m_forwarder, m_registrar, 
                 m_sipMessageFactory);
         
-        final IoHandler handler = new SipProtocolHandler(visitorFactory);
+        final IoHandler handler = new SipIoHandler(visitorFactory);
         
         //acceptor.setHandler(handler);
         

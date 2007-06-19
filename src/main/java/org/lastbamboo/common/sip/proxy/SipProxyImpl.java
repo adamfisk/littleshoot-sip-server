@@ -28,6 +28,7 @@ import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageVisitorFactory;
 import org.lastbamboo.common.sip.stack.message.header.SipHeaderFactory;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
+import org.lastbamboo.common.util.mina.MinaUtils;
 
 /**
  * Implementation of a SIP proxy.
@@ -81,35 +82,18 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
 
     public void start()
         {
-        final Executor threadPool = Executors.newCachedThreadPool();
-        final SocketAcceptor acceptor = new SocketAcceptor(
-            Runtime.getRuntime().availableProcessors() + 1, threadPool);
-        final IoServiceConfig acceptorConfig = acceptor.getDefaultConfig();
-        acceptorConfig.setThreadModel(ThreadModel.MANUAL);
-        
-        final SocketAcceptorConfig cfg = new SocketAcceptorConfig();
-        cfg.getSessionConfig().setReuseAddress(true);
-        
-        acceptor.addListener(this);
-        
         final ProtocolCodecFactory codecFactory = 
             new SipCodecFactory(m_sipHeaderFactory);
-        final DefaultIoFilterChainBuilder filterChainBuilder = 
-            cfg.getFilterChain();
-        filterChainBuilder.addLast("codec", 
-            new ProtocolCodecFilter(codecFactory));
-        filterChainBuilder.addLast("threadPool", 
-            new ExecutorFilter(Executors.newCachedThreadPool()));
-
+        final SocketAcceptor acceptor = 
+            MinaUtils.createTcpAcceptor(codecFactory, this);
+        
         final SipMessageVisitorFactory visitorFactory = 
             new SipProxyMessageVisitorFactory(m_forwarder, m_registrar, 
                 m_sipMessageFactory);
-        
         final IoHandler handler = new SipIoHandler(visitorFactory);
-        
         try
             {
-            acceptor.bind(new InetSocketAddress(SIP_PORT), handler, cfg);
+            acceptor.bind(new InetSocketAddress(SIP_PORT), handler);
             }
         catch (final IOException e)
             {

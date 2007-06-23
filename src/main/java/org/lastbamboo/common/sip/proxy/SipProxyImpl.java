@@ -1,34 +1,24 @@
 package org.lastbamboo.common.sip.proxy;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.DefaultIoFilterChainBuilder;
 import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoService;
 import org.apache.mina.common.IoServiceConfig;
 import org.apache.mina.common.IoServiceListener;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.common.SimpleByteBufferAllocator;
-import org.apache.mina.common.ThreadModel;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
-import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.filter.executor.ExecutorFilter;
-import org.apache.mina.transport.socket.nio.SocketAcceptor;
-import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
-import org.lastbamboo.common.sip.stack.codec.SipCodecFactory;
 import org.lastbamboo.common.sip.stack.codec.SipIoHandler;
+import org.lastbamboo.common.sip.stack.codec.SipProtocolCodecFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageVisitorFactory;
 import org.lastbamboo.common.sip.stack.message.header.SipHeaderFactory;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
-import org.lastbamboo.common.util.mina.MinaUtils;
+import org.lastbamboo.common.util.mina.MinaTcpServer;
 
 /**
  * Implementation of a SIP proxy.
@@ -51,6 +41,8 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
     private final SipTcpTransportLayer m_transportLayer;
 
     private final SipHeaderFactory m_sipHeaderFactory;
+
+    private MinaTcpServer m_minaServer;
 
     /**
      * Creates a new SIP server.
@@ -78,27 +70,20 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         // Configure the MINA buffers for optimal performance.
         ByteBuffer.setUseDirectBuffers(false);
         ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
-        }
-
-    public void start()
-        {
         final ProtocolCodecFactory codecFactory = 
-            new SipCodecFactory(m_sipHeaderFactory);
-        final SocketAcceptor acceptor = 
-            MinaUtils.createTcpAcceptor(codecFactory, this);
+            new SipProtocolCodecFactory(m_sipHeaderFactory);
         
         final SipMessageVisitorFactory visitorFactory = 
             new SipProxyMessageVisitorFactory(m_forwarder, m_registrar, 
                 m_sipMessageFactory);
         final IoHandler handler = new SipIoHandler(visitorFactory);
-        try
-            {
-            acceptor.bind(new InetSocketAddress(SIP_PORT), handler);
-            }
-        catch (final IOException e)
-            {
-            LOG.error("Could not bind!!", e);
-            }
+        this.m_minaServer = new MinaTcpServer(codecFactory, this, handler, 
+            SIP_PORT);
+        }
+
+    public void start()
+        {
+        this.m_minaServer.start();
         }
 
     public void sessionCreated(final IoSession session)

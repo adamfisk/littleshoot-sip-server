@@ -95,7 +95,10 @@ public class SipRegistrarImpl implements SipRegistrar
             }
         else
             {
-            // Maybe we've received duplicate close events?  Strange.
+            // Maybe we've received duplicate close events?  This could also
+            // happen if the client connected but never actually registered,
+            // and we're getting a session closed for a client we never knew
+            // about.
             LOG.warn("Could not locate URI for reader/writer: " + 
                 session + " " + this.m_registrations.keySet());
             }

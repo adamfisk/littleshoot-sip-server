@@ -136,7 +136,7 @@ public class StatelessSipProxy implements SipRequestAndResponseForwarder
         {
         if (LOG.isDebugEnabled())
             {
-            LOG.debug("Forwarding original respone: "+originalResponse);
+            LOG.debug("Forwarding original response: "+originalResponse);
             }
         final SipHeader header = 
             originalResponse.getHeader(SipHeaderNames.VIA);

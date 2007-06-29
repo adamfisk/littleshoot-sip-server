@@ -31,7 +31,7 @@ public class SipProxyMessageVisitor implements SipMessageVisitor
     private final IoSession m_ioSession;
     private volatile static int s_registersVisited = 0;
     private volatile static int s_invitesVisited = 0;
-    private volatile static int s_inviteOksVisited = 0;
+    private volatile static int s_responsesVisited = 0;
     
     /**
      * Creates a new visitor.
@@ -56,12 +56,12 @@ public class SipProxyMessageVisitor implements SipMessageVisitor
 
     public void visitResponse(final SipResponse response)
         {
-        s_inviteOksVisited++;
+        s_responsesVisited++;
         if (LOG.isDebugEnabled())
             {
             // We know these are OKs to INVITEs because the server will
             // never visit REGISTER OKs.
-            LOG.debug("Now visited "+s_inviteOksVisited+" INVITE OKs");
+            LOG.debug("Now visited "+s_responsesVisited+" responses");
             }
         
         try

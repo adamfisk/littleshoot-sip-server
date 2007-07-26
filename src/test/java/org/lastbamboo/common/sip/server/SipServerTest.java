@@ -73,8 +73,11 @@ public class SipServerTest extends TestCase
         {
         LOG.debug("Starting server..");
         startServerThread();
-        LOG.debug("Started server...");
-        Thread.sleep(300);
+
+        synchronized (this)
+            {
+            wait(6000);
+            }
         final Socket sock = new Socket(NetworkUtils.getLocalHost(), 5060);
         LOG.debug("Connected...");
         final OutputStream os = sock.getOutputStream();
@@ -104,6 +107,10 @@ public class SipServerTest extends TestCase
             public void run()
                 {
                 startServer();
+                synchronized (SipServerTest.this)
+                    {
+                    SipServerTest.this.notify();
+                    }
                 }
             
             };

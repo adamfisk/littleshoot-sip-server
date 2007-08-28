@@ -42,7 +42,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
 
     private final SipHeaderFactory m_sipHeaderFactory;
 
-    private MinaTcpServer m_minaServer;
+    private final MinaTcpServer m_minaServer;
 
     /**
      * Creates a new SIP server.
@@ -78,7 +78,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
                 m_sipMessageFactory);
         final IoHandler handler = new SipIoHandler(visitorFactory);
         this.m_minaServer = new MinaTcpServer(codecFactory, this, handler, 
-            SIP_PORT);
+            SIP_PORT, "SIP-Proxy");
         }
 
     public void start()

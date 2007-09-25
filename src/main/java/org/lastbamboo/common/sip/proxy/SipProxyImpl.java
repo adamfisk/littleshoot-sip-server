@@ -19,6 +19,7 @@ import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageVisitorFactory;
 import org.lastbamboo.common.sip.stack.message.header.SipHeaderFactory;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
+import org.lastbamboo.common.util.RuntimeIoException;
 import org.lastbamboo.common.util.mina.MinaTcpServer;
 
 /**
@@ -102,6 +103,12 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
                     LOG.error("Interrupted??", e);
                     }
                 }
+            }
+        
+        if (!this.m_serviceActivated.get())
+            {
+            LOG.error("Server not started!!");
+            throw new RuntimeIoException("Could not start SIP server");
             }
         }
 

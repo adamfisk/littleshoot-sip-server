@@ -110,6 +110,10 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
             LOG.error("Server not started!!");
             throw new RuntimeIoException("Could not start SIP server");
             }
+        else
+            {
+            LOG.debug("Started server...");
+            }
         }
 
     public void sessionCreated(final IoSession session)

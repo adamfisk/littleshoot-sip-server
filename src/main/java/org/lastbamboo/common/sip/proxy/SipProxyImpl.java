@@ -1,6 +1,7 @@
 package org.lastbamboo.common.sip.proxy;
 
 import java.net.SocketAddress;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,6 +45,8 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
 
     private final MinaTcpServer m_minaServer;
 
+    private final AtomicBoolean m_serviceActivated = new AtomicBoolean(false);
+
     /**
      * Creates a new SIP server.
      * 
@@ -84,6 +87,22 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
     public void start()
         {
         this.m_minaServer.start();
+        
+        // Wait for the server to really start.
+        synchronized (this.m_serviceActivated)
+            {
+            if (!this.m_serviceActivated.get())
+                {
+                try
+                    {
+                    this.m_serviceActivated.wait(6000);
+                    }
+                catch (final InterruptedException e)
+                    {
+                    LOG.error("Interrupted??", e);
+                    }
+                }
+            }
         }
 
     public void sessionCreated(final IoSession session)
@@ -103,6 +122,11 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         final IoServiceConfig config)
         {
         LOG.debug("Service activated!! "+service);
+        this.m_serviceActivated.set(true);
+        synchronized (this.m_serviceActivated)
+            {
+            this.m_serviceActivated.notify();
+            }
         }
 
     public void serviceDeactivated(final IoService service, 

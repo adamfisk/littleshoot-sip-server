@@ -70,6 +70,8 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         m_sipHeaderFactory = sipHeaderFactory;
         m_sipMessageFactory = sipMessageFactory;
         m_transportLayer = transportLayer;
+
+        LOG.debug("Starting server on: " + SIP_PORT);
         
         // Configure the MINA buffers for optimal performance.
         ByteBuffer.setUseDirectBuffers(false);
@@ -82,12 +84,13 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
                 m_sipMessageFactory);
         final IoHandler handler = new SipIoHandler(visitorFactory);
         this.m_minaServer = new MinaTcpServer(codecFactory, this, handler, 
-            SIP_PORT, "SIP-Proxy");
+            "SIP-Proxy");
         }
 
     public void start()
         {
-        this.m_minaServer.start();
+        LOG.debug("Starting MINA server...");
+        this.m_minaServer.start(SIP_PORT);
         
         // Wait for the server to really start.
         synchronized (this.m_serviceActivated)
@@ -132,7 +135,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         final SocketAddress serviceAddress, final IoHandler handler, 
         final IoServiceConfig config)
         {
-        LOG.debug("Service activated!! "+service);
+        LOG.debug("Service activated on: "+serviceAddress);
         this.m_serviceActivated.set(true);
         synchronized (this.m_serviceActivated)
             {
@@ -144,6 +147,12 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         final SocketAddress serviceAddress, final IoHandler handler, 
         final IoServiceConfig config)
         {
-        LOG.debug("Service deactivated!! "+service);
+        LOG.debug("Service deactivated on: "+serviceAddress);
+        }
+    
+    @Override
+    public String toString()
+        {
+        return getClass().getSimpleName();
         }
     }

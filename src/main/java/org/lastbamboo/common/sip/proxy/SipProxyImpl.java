@@ -3,8 +3,6 @@ package org.lastbamboo.common.sip.proxy;
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoService;
@@ -21,6 +19,8 @@ import org.lastbamboo.common.sip.stack.message.header.SipHeaderFactory;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
 import org.lastbamboo.common.util.RuntimeIoException;
 import org.lastbamboo.common.util.mina.MinaTcpServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of a SIP proxy.
@@ -28,7 +28,7 @@ import org.lastbamboo.common.util.mina.MinaTcpServer;
 public class SipProxyImpl implements SipProxy, IoServiceListener
     {
     
-    private static final Log LOG = LogFactory.getLog(SipProxyImpl.class);
+    private final Logger m_log = LoggerFactory.getLogger(getClass());
 
     private final SipMessageFactory m_sipMessageFactory;
     
@@ -71,7 +71,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         m_sipMessageFactory = sipMessageFactory;
         m_transportLayer = transportLayer;
 
-        LOG.debug("Starting server on: " + SIP_PORT);
+        m_log.debug("Starting server on: " + SIP_PORT);
         
         // Configure the MINA buffers for optimal performance.
         ByteBuffer.setUseDirectBuffers(false);
@@ -89,7 +89,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
 
     public void start()
         {
-        LOG.debug("Starting MINA server...");
+        m_log.debug("Starting MINA server...");
         this.m_minaServer.start(SIP_PORT);
         
         // Wait for the server to really start.
@@ -103,19 +103,19 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
                     }
                 catch (final InterruptedException e)
                     {
-                    LOG.error("Interrupted??", e);
+                    m_log.error("Interrupted??", e);
                     }
                 }
             }
         
         if (!this.m_serviceActivated.get())
             {
-            LOG.error("Server not started!!");
+            m_log.error("Server not started!!");
             throw new RuntimeIoException("Could not start SIP server");
             }
         else
             {
-            LOG.debug("Started server...");
+            m_log.debug("Started server...");
             }
         }
 
@@ -126,7 +126,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
 
     public void sessionDestroyed(final IoSession session)
         {
-        LOG.debug("Session was destroyed!!");
+        m_log.debug("Session was destroyed: {}", session);
         this.m_registrar.sessionClosed(session);
         this.m_transportLayer.removeConnection(session);
         }
@@ -135,7 +135,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         final SocketAddress serviceAddress, final IoHandler handler, 
         final IoServiceConfig config)
         {
-        LOG.debug("Service activated on: "+serviceAddress);
+        m_log.debug("Service activated on: {}", serviceAddress);
         this.m_serviceActivated.set(true);
         synchronized (this.m_serviceActivated)
             {
@@ -147,7 +147,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         final SocketAddress serviceAddress, final IoHandler handler, 
         final IoServiceConfig config)
         {
-        LOG.debug("Service deactivated on: "+serviceAddress);
+        m_log.debug("Service deactivated on: "+serviceAddress);
         }
     
     @Override

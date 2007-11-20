@@ -3,13 +3,11 @@ package org.lastbamboo.common.sip.proxy;
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoService;
 import org.apache.mina.common.IoServiceConfig;
 import org.apache.mina.common.IoServiceListener;
 import org.apache.mina.common.IoSession;
-import org.apache.mina.common.SimpleByteBufferAllocator;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.lastbamboo.common.sip.stack.codec.SipIoHandler;
 import org.lastbamboo.common.sip.stack.codec.SipProtocolCodecFactory;
@@ -73,9 +71,6 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
 
         m_log.debug("Starting server on: " + SIP_PORT);
         
-        // Configure the MINA buffers for optimal performance.
-        ByteBuffer.setUseDirectBuffers(false);
-        ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
         final ProtocolCodecFactory codecFactory = 
             new SipProtocolCodecFactory(m_sipHeaderFactory);
         

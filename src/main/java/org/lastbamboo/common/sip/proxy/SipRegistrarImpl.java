@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.management.NotificationBroadcasterSupport;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.IoSession;
@@ -25,7 +27,8 @@ import org.lastbamboo.common.util.MapUtils;
  * TODO: Also create a map of reader/writers to SIP URIs for more efficient
  * removals??
  */
-public class SipRegistrarImpl implements SipRegistrar 
+public class SipRegistrarImpl extends NotificationBroadcasterSupport 
+    implements SipRegistrar, SipRegistrarImplMBean
     {
 
     private static final Log LOG = LogFactory.getLog(SipRegistrarImpl.class);
@@ -39,6 +42,11 @@ public class SipRegistrarImpl implements SipRegistrar
 
     private final Collection<RegistrationListener> m_registrationListeners =
         new LinkedList<RegistrationListener>();
+
+    /**
+     * Keep track of the maximum number of registrations we've seen.
+     */
+    private int m_maxSize = 0;
 
     /**
      * Creates a new registrar.
@@ -62,6 +70,12 @@ public class SipRegistrarImpl implements SipRegistrar
         final SipHeader fromHeader = register.getHeader(SipHeaderNames.FROM);
         final URI uri = SipMessageUtils.extractUri(fromHeader);
         this.m_registrations.put(uri, session);
+        
+        // Keep stats on the maximum number of registrations we've seen.
+        if (m_registrations.size() > m_maxSize)
+            {
+            m_maxSize = m_registrations.size();
+            }
         
         final SipResponse response = 
             this.m_messageFactory.createRegisterOk(register);
@@ -129,6 +143,16 @@ public class SipRegistrarImpl implements SipRegistrar
         {
         LOG.debug("Adding registration listener...");
         this.m_registrationListeners.add(listener);
+        }
+
+    public int getNumRegistered()
+        {
+        return this.m_registrations.size();
+        }
+
+    public int getMaxRegistered()
+        {
+        return this.m_maxSize;
         }
 
     }

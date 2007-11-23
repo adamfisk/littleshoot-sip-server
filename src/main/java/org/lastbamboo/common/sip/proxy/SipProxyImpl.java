@@ -1,7 +1,15 @@
 package org.lastbamboo.common.sip.proxy;
 
+import java.lang.management.ManagementFactory;
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.NotCompliantMBeanException;
+import javax.management.ObjectName;
 
 import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoService;
@@ -112,6 +120,10 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
             {
             m_log.debug("Started server...");
             }
+        
+        // Start this last because otherwise we might be seen as "online"
+        // prematurely.
+        startJmxServer();
         }
 
     public void sessionCreated(final IoSession session)
@@ -143,6 +155,42 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         final IoServiceConfig config)
         {
         m_log.debug("Service deactivated on: "+serviceAddress);
+        }
+    
+
+    private void startJmxServer()
+        {
+        m_log.debug("Starting JMX server on: {}",
+            System.getProperty("com.sun.management.jmxremote.port"));
+        final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        final ObjectName mbeanName;
+        try
+            {
+            final String jmxUrl = 
+                "org.lastbamboo.common.sip.proxy:type=SipRegistrarImpl";
+            mbeanName = new ObjectName(jmxUrl);
+            }
+        catch (final MalformedObjectNameException e)
+            {
+            m_log.error("Could not start JMX", e);
+            return;
+            }
+        try
+            {
+            mbs.registerMBean(this.m_registrar, mbeanName);
+            }
+        catch (final InstanceAlreadyExistsException e)
+            {
+            m_log.error("Could not start JMX", e);
+            }
+        catch (final MBeanRegistrationException e)
+            {
+            m_log.error("Could not start JMX", e);
+            }
+        catch (final NotCompliantMBeanException e)
+            {
+            m_log.error("Could not start JMX", e);
+            }
         }
     
     @Override

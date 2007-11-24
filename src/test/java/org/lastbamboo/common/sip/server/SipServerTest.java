@@ -13,6 +13,7 @@ import junit.framework.TestCase;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.lastbamboo.common.sip.proxy.SipConstants;
 import org.lastbamboo.common.sip.proxy.SipProxy;
 import org.lastbamboo.common.sip.proxy.SipProxyImpl;
 import org.lastbamboo.common.sip.proxy.SipRegistrar;
@@ -78,7 +79,8 @@ public class SipServerTest extends TestCase
             {
             wait(6000);
             }
-        final Socket sock = new Socket(NetworkUtils.getLocalHost(), 5060);
+        final Socket sock = new Socket(NetworkUtils.getLocalHost(), 
+            SipConstants.SIP_PORT);
         LOG.debug("Connected...");
         final OutputStream os = sock.getOutputStream();
         

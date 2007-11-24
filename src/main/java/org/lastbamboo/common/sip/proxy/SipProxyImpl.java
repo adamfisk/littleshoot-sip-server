@@ -40,11 +40,6 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
     
     private final SipRequestAndResponseForwarder m_forwarder;
     private final SipRegistrar m_registrar;
-    
-    /**
-     * Use the default SIP port.
-     */
-    private static final int SIP_PORT = 5061;
 
     private final SipTcpTransportLayer m_transportLayer;
 
@@ -77,7 +72,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         m_sipMessageFactory = sipMessageFactory;
         m_transportLayer = transportLayer;
 
-        m_log.debug("Starting server on: " + SIP_PORT);
+        m_log.debug("Starting server on: " + SipConstants.SIP_PORT);
         
         final ProtocolCodecFactory codecFactory = 
             new SipProtocolCodecFactory(m_sipHeaderFactory);
@@ -93,7 +88,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
     public void start()
         {
         m_log.debug("Starting MINA server...");
-        this.m_minaServer.start(SIP_PORT);
+        this.m_minaServer.start(SipConstants.SIP_PORT);
         
         // Wait for the server to really start.
         synchronized (this.m_serviceActivated)

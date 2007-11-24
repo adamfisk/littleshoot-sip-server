@@ -44,7 +44,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
     /**
      * Use the default SIP port.
      */
-    private static final int SIP_PORT = 5060;
+    private static final int SIP_PORT = 5061;
 
     private final SipTcpTransportLayer m_transportLayer;
 

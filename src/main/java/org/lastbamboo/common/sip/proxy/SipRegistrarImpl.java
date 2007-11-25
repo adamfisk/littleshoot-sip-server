@@ -9,8 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.management.NotificationBroadcasterSupport;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.IoSession;
 import org.lastbamboo.common.sip.stack.message.Register;
 import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
@@ -20,6 +18,8 @@ import org.lastbamboo.common.sip.stack.message.header.SipHeader;
 import org.lastbamboo.common.sip.stack.message.header.SipHeaderNames;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
 import org.lastbamboo.common.util.MapUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Registrar for SIP clients.
@@ -31,7 +31,8 @@ public class SipRegistrarImpl extends NotificationBroadcasterSupport
     implements SipRegistrar, SipRegistrarImplMBean
     {
 
-    private static final Log LOG = LogFactory.getLog(SipRegistrarImpl.class);
+    private final Logger m_log = 
+        LoggerFactory.getLogger(SipRegistrarImpl.class);
     
     private final SipMessageFactory m_messageFactory;
 
@@ -47,7 +48,7 @@ public class SipRegistrarImpl extends NotificationBroadcasterSupport
      * Keep track of the maximum number of registrations we've seen.
      */
     private int m_maxSize = 0;
-
+    
     /**
      * Creates a new registrar.
      * 
@@ -61,10 +62,10 @@ public class SipRegistrarImpl extends NotificationBroadcasterSupport
         this.m_messageFactory = factory;
         this.m_transportLayer = transportLayer;
         }
-    
+
     public void handleRegister(final Register register, final IoSession session)
         {
-        LOG.debug("Processing registration...");
+        m_log.debug("Processing registration...");
         
         // We also need to add a mapping according to the URI.
         final SipHeader fromHeader = register.getHeader(SipHeaderNames.FROM);
@@ -82,7 +83,7 @@ public class SipRegistrarImpl extends NotificationBroadcasterSupport
         
         final InetSocketAddress remoteAddress = 
             (InetSocketAddress) session.getRemoteAddress();
-        LOG.debug("Writing OK response to SIP client...");
+        m_log.debug("Writing OK response to SIP client...");
         
         this.m_transportLayer.writeResponse(remoteAddress, response);
         notifyListeners(uri, true);
@@ -113,7 +114,7 @@ public class SipRegistrarImpl extends NotificationBroadcasterSupport
             // happen if the client connected but never actually registered,
             // and we're getting a session closed for a client we never knew
             // about.
-            LOG.warn("Could not locate URI for reader/writer: " + 
+            m_log.warn("Could not locate URI for reader/writer: " + 
                 session + " " + this.m_registrations.keySet());
             }
         }
@@ -141,18 +142,23 @@ public class SipRegistrarImpl extends NotificationBroadcasterSupport
 
     public void addRegistrationListener(final RegistrationListener listener)
         {
-        LOG.debug("Adding registration listener...");
+        m_log.debug("Adding registration listener...");
         this.m_registrationListeners.add(listener);
         }
 
-    public int getNumRegistered()
+    public int getSipNumRegistered()
         {
         return this.m_registrations.size();
         }
 
-    public int getMaxRegistered()
+    public int getSipMaxRegistered()
         {
         return this.m_maxSize;
         }
 
+    @Override
+    public String toString()
+        {
+        return getClass().getSimpleName();
+        }
     }

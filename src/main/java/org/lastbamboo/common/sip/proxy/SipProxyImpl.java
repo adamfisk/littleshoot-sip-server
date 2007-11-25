@@ -4,12 +4,7 @@ import java.lang.management.ManagementFactory;
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.management.InstanceAlreadyExistsException;
-import javax.management.MBeanRegistrationException;
 import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
-import javax.management.NotCompliantMBeanException;
-import javax.management.ObjectName;
 
 import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoService;
@@ -23,6 +18,7 @@ import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageVisitorFactory;
 import org.lastbamboo.common.sip.stack.message.header.SipHeaderFactory;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
+import org.lastbamboo.common.util.JmxUtils;
 import org.lastbamboo.common.util.RuntimeIoException;
 import org.lastbamboo.common.util.mina.MinaTcpServer;
 import org.slf4j.Logger;
@@ -31,7 +27,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Implementation of a SIP proxy.
  */
-public class SipProxyImpl implements SipProxy, IoServiceListener
+public class SipProxyImpl implements SipProxy, IoServiceListener,
+    SipProxyImplMBean
     {
     
     private final Logger m_log = LoggerFactory.getLogger(getClass());
@@ -158,34 +155,13 @@ public class SipProxyImpl implements SipProxy, IoServiceListener
         m_log.debug("Starting JMX server on: {}",
             System.getProperty("com.sun.management.jmxremote.port"));
         final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        final ObjectName mbeanName;
-        try
-            {
-            final String jmxUrl = 
-                "org.lastbamboo.common.sip.proxy:type=SipRegistrarImpl";
-            mbeanName = new ObjectName(jmxUrl);
-            }
-        catch (final MalformedObjectNameException e)
-            {
-            m_log.error("Could not start JMX", e);
-            return;
-            }
-        try
-            {
-            mbs.registerMBean(this.m_registrar, mbeanName);
-            }
-        catch (final InstanceAlreadyExistsException e)
-            {
-            m_log.error("Could not start JMX", e);
-            }
-        catch (final MBeanRegistrationException e)
-            {
-            m_log.error("Could not start JMX", e);
-            }
-        catch (final NotCompliantMBeanException e)
-            {
-            m_log.error("Could not start JMX", e);
-            }
+        JmxUtils.register(mbs, this.m_registrar);
+        JmxUtils.register(mbs, this);
+        }
+    
+    public int getSipPort()
+        {
+        return SipConstants.SIP_PORT;
         }
     
     @Override

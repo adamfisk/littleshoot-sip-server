@@ -137,12 +137,11 @@ public class SipServerTest extends TestCase
         final SipRegistrar registrar = 
             new SipRegistrarImpl(messageFactory, tcpTransport);
         final SipRequestAndResponseForwarder forwarder = 
-            new StatelessSipProxy(tcpTransport, registrar, null, null, uriUtils, messageFactory); 
+            new StatelessSipProxy(tcpTransport, registrar, null, null, uriUtils, 
+                messageFactory); 
         
         final SipProxy proxy = new SipProxyImpl(
             forwarder, registrar, headerFactory, messageFactory, tcpTransport);
-        //final SipRegistrar registrar = 
-          //  (SipRegistrar) this.m_appContext.getBean("sipRegistrar");
 
         proxy.start();
         LOG.debug("Started proxy...");

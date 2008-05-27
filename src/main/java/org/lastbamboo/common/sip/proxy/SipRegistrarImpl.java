@@ -115,7 +115,7 @@ public class SipRegistrarImpl extends NotificationBroadcasterSupport
             // and we're getting a session closed for a client we never knew
             // about.
             m_log.warn("Could not locate URI for reader/writer: " + 
-                session + " " + this.m_registrations.keySet());
+                session + " " + this.m_registrations.values());
             }
         }
     

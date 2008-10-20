@@ -1,6 +1,7 @@
 package org.lastbamboo.common.sip.proxy;
 
 import java.net.URI;
+import java.util.Collection;
 
 import org.apache.mina.common.IoSession;
 import org.lastbamboo.common.sip.stack.message.Register;
@@ -52,5 +53,12 @@ public interface SipRegistrar
      * @param listener The listener to add.
      */
     void addRegistrationListener(RegistrationListener listener);
+    
+    /**
+     * Get registered URIs
+     * 
+     * @return The registered URIs.
+     */
+    Collection<URI> getRegistered();
 
     }

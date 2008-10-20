@@ -3,8 +3,10 @@ package org.lastbamboo.common.sip.proxy;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.management.NotificationBroadcasterSupport;
@@ -154,6 +156,17 @@ public class SipRegistrarImpl extends NotificationBroadcasterSupport
     public int getSipMaxRegistered()
         {
         return this.m_maxSize;
+        }
+    
+    public Collection<URI> getRegistered()
+        {
+        final Collection<URI> registered = new HashSet<URI>();
+        synchronized (this.m_registrations)
+            {
+            final Set<URI> keySet = this.m_registrations.keySet();
+            registered.addAll(keySet);
+            }
+        return registered;
         }
 
     @Override

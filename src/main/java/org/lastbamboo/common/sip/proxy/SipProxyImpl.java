@@ -1,5 +1,6 @@
 package org.lastbamboo.common.sip.proxy;
 
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -82,7 +83,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener,
             "SIP-Proxy");
         }
 
-    public void start()
+    public void start() throws IOException
         {
         m_log.debug("Starting MINA server...");
         this.m_minaServer.start(SipConstants.SIP_PORT);

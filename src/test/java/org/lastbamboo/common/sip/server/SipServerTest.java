@@ -1,6 +1,7 @@
 package org.lastbamboo.common.sip.server;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -13,6 +14,7 @@ import junit.framework.TestCase;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.mina.common.RuntimeIOException;
 import org.lastbamboo.common.sip.proxy.SipConstants;
 import org.lastbamboo.common.sip.proxy.SipProxy;
 import org.lastbamboo.common.sip.proxy.SipProxyImpl;
@@ -33,6 +35,7 @@ import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayerImpl;
 import org.lastbamboo.common.sip.stack.util.UriUtils;
 import org.lastbamboo.common.sip.stack.util.UriUtilsImpl;
 import org.lastbamboo.common.util.NetworkUtils;
+import org.lastbamboo.common.util.RuntimeIoException;
 
 public class SipServerTest extends TestCase
     {
@@ -108,7 +111,15 @@ public class SipServerTest extends TestCase
 
             public void run()
                 {
-                startServer();
+                try
+                    {
+                    startServer();
+                    }
+                catch (final IOException e)
+                    {
+                    fail ("Could not start server");
+                    throw new RuntimeIoException("Could not start server", e);
+                    }
                 synchronized (SipServerTest.this)
                     {
                     SipServerTest.this.notify();
@@ -122,7 +133,7 @@ public class SipServerTest extends TestCase
         server.start();
         }
 
-    private void startServer()
+    private void startServer() throws IOException
         {
         final SipHeaderFactory headerFactory = new SipHeaderFactoryImpl();
         final SipMessageFactory messageFactory = 

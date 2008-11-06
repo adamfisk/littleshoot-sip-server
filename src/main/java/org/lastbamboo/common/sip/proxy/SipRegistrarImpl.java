@@ -72,6 +72,13 @@ public class SipRegistrarImpl extends NotificationBroadcasterSupport
         // We also need to add a mapping according to the URI.
         final SipHeader fromHeader = register.getHeader(SipHeaderNames.FROM);
         final URI uri = SipMessageUtils.extractUri(fromHeader);
+        if (this.m_registrations.containsKey(uri))
+            {
+            final IoSession existingSession = this.m_registrations.get(uri);
+            m_log.warn("We already have a registration for URI: " + 
+                uri+" with value: "+existingSession+"...closing");
+            //existingSession.close();
+            }
         this.m_registrations.put(uri, session);
         
         // Keep stats on the maximum number of registrations we've seen.

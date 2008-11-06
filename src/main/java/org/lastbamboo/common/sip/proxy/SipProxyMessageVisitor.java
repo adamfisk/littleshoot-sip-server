@@ -128,7 +128,8 @@ public class SipProxyMessageVisitor implements SipMessageVisitor
         {
         if (LOG.isDebugEnabled())
             {
-            LOG.debug("Visiting double CRLF");
+            LOG.debug("Visiting double CRLF from: {}", 
+                this.m_ioSession.getRemoteAddress());
             }
         
         // TODO: Do nothing for now.  We should return with a single CRLF, as 

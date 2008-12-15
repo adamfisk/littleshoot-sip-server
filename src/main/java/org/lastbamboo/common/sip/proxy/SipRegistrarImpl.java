@@ -77,7 +77,7 @@ public class SipRegistrarImpl extends NotificationBroadcasterSupport
             final IoSession existingSession = this.m_registrations.get(uri);
             m_log.warn("We already have a registration for URI: " + 
                 uri+" with value: "+existingSession+"...closing");
-            //existingSession.close();
+            existingSession.close();
             }
         this.m_registrations.put(uri, session);
         
@@ -85,6 +85,7 @@ public class SipRegistrarImpl extends NotificationBroadcasterSupport
         if (m_registrations.size() > m_maxSize)
             {
             m_maxSize = m_registrations.size();
+            m_log.debug("New maximum registrations this session: {}", m_maxSize);
             }
         
         final SipResponse response = 

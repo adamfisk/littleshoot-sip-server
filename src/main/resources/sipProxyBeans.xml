@@ -18,7 +18,6 @@
     <bean id="lastBambooLocationService"
           class="org.lastbamboo.common.sip.proxy.LastBambooLocationService">
         <constructor-arg><ref bean="uriUtils"/></constructor-arg>
-        <constructor-arg><ref bean="idToRegistrars"/></constructor-arg>
         </bean>
 
 

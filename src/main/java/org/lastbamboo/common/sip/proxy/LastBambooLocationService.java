@@ -7,7 +7,6 @@ import java.util.LinkedList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.lastbamboo.common.netmap.IntUriNetMap;
 import org.lastbamboo.common.sip.stack.util.UriUtils;
 
 /**
@@ -30,7 +29,7 @@ public final class LastBambooLocationService implements LocationService
      * The mapping from Last Bamboo user identifiers to the SIP proxies with
      * which they are registered.
      */
-    private final IntUriNetMap m_idToProxies;
+    //private final IntUriNetMap m_idToProxies;
 
     /**
      * Constructs a new location service.
@@ -41,12 +40,11 @@ public final class LastBambooLocationService implements LocationService
      *      The mapping from Last Bamboo SIP URIs to the SIP proxies with which
      *      they are registered.
      */
-    public LastBambooLocationService
-            (final UriUtils uriUtils,
-             final IntUriNetMap idToProxies)
+    public LastBambooLocationService (final UriUtils uriUtils)
+            // final IntUriNetMap idToProxies)
         {
         m_uriUtils = uriUtils;
-        m_idToProxies = idToProxies;
+        //m_idToProxies = idToProxies;
         }
 
     /**
@@ -71,6 +69,7 @@ public final class LastBambooLocationService implements LocationService
         final int personId = m_uriUtils.getPersonIdInSipUri (requestUri);
 
         final Collection targetSet = new LinkedList ();
+        /*
         final Iterator proxies = m_idToProxies.getValueIterator (personId);
 
         while (proxies.hasNext () && targetSet.isEmpty ())
@@ -89,6 +88,7 @@ public final class LastBambooLocationService implements LocationService
                 targetSet.add (targetUri);
                 }
             }
+            */
 
         return (targetSet);
         }

@@ -34,13 +34,13 @@
         </bean>
 
     <bean id="unregisteredUriForwarder"
-    	  class="org.lastbamboo.common.sip.proxy.stateless.UnregisteredUriForwarder">
-    	  <constructor-arg><ref local="locationServiceChain"/></constructor-arg>
-    	  <constructor-arg><ref bean="sipTransportLayer"/></constructor-arg>
-    	  <constructor-arg><ref bean="uriUtils"/></constructor-arg>
-    	  <constructor-arg><ref bean="sipMessageFactory"/></constructor-arg>
-    	  <constructor-arg><ref local="sipRegistrar"/></constructor-arg>
-    	  </bean>
+        class="org.lastbamboo.common.sip.proxy.stateless.UnregisteredUriForwarder">
+        <constructor-arg><ref local="locationServiceChain"/></constructor-arg>
+        <constructor-arg><ref bean="sipTransportLayer"/></constructor-arg>
+        <constructor-arg><ref bean="uriUtils"/></constructor-arg>
+        <constructor-arg><ref bean="sipMessageFactory"/></constructor-arg>
+        <constructor-arg><ref local="sipRegistrar"/></constructor-arg>
+        </bean>
 
     <bean id="externalDomainForwarder"
     	  class="org.lastbamboo.common.sip.proxy.stateless.ExternalDomainForwarder">

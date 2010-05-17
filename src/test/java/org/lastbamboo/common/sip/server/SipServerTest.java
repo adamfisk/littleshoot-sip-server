@@ -14,7 +14,7 @@ import junit.framework.TestCase;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.mina.common.RuntimeIOException;
+import org.littleshoot.mina.common.RuntimeIOException;
 import org.lastbamboo.common.sip.proxy.SipConstants;
 import org.lastbamboo.common.sip.proxy.SipProxy;
 import org.lastbamboo.common.sip.proxy.SipProxyImpl;

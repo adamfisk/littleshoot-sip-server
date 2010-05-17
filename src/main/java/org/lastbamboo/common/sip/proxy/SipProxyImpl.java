@@ -7,12 +7,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.management.MBeanServer;
 
-import org.apache.mina.common.IoHandler;
-import org.apache.mina.common.IoService;
-import org.apache.mina.common.IoServiceConfig;
-import org.apache.mina.common.IoServiceListener;
-import org.apache.mina.common.IoSession;
-import org.apache.mina.filter.codec.ProtocolCodecFactory;
+import org.littleshoot.mina.common.IoHandler;
+import org.littleshoot.mina.common.IoService;
+import org.littleshoot.mina.common.IoServiceConfig;
+import org.littleshoot.mina.common.IoServiceListener;
+import org.littleshoot.mina.common.IoSession;
+import org.littleshoot.mina.filter.codec.ProtocolCodecFactory;
 import org.lastbamboo.common.sip.stack.codec.SipIoHandler;
 import org.lastbamboo.common.sip.stack.codec.SipProtocolCodecFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
@@ -116,7 +116,7 @@ public class SipProxyImpl implements SipProxy, IoServiceListener,
         
         // Start this last because otherwise we might be seen as "online"
         // prematurely.
-        startJmxServer();
+        //startJmxServer();
         }
 
     public void sessionCreated(final IoSession session)

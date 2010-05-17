@@ -3,7 +3,7 @@ package org.lastbamboo.common.sip.proxy;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import org.apache.mina.common.IoSession;
+import org.littleshoot.mina.common.IoSession;
 import org.lastbamboo.common.sip.stack.message.DoubleCrlfKeepAlive;
 import org.lastbamboo.common.sip.stack.message.Invite;
 import org.lastbamboo.common.sip.stack.message.Register;

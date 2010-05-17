@@ -1,6 +1,6 @@
 package org.lastbamboo.common.sip.proxy;
 
-import org.apache.mina.common.IoSession;
+import org.littleshoot.mina.common.IoSession;
 import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageVisitor;
 import org.lastbamboo.common.sip.stack.message.SipMessageVisitorFactory;

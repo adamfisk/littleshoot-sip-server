@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.management.NotificationBroadcasterSupport;
 
-import org.apache.mina.common.IoSession;
+import org.littleshoot.mina.common.IoSession;
 import org.lastbamboo.common.sip.stack.message.Register;
 import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageUtils;

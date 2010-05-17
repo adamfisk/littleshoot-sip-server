@@ -3,7 +3,7 @@ package org.lastbamboo.common.sip.proxy;
 import java.net.URI;
 import java.util.Collection;
 
-import org.apache.mina.common.IoSession;
+import org.littleshoot.mina.common.IoSession;
 import org.lastbamboo.common.sip.stack.message.Register;
 
 /**

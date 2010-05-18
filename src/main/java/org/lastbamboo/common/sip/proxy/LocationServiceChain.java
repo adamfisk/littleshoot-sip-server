@@ -5,8 +5,8 @@ import java.util.Collection;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 /**
@@ -18,8 +18,7 @@ public final class LocationServiceChain implements LocationService
     /**
      * The log for this class.
      */
-    private final Log LOG =
-            LogFactory.getLog (LocationServiceChain.class);
+    private final Logger LOG = LoggerFactory.getLogger (LocationServiceChain.class);
 
     /**
      * The collection that is the chain of location services.  The first

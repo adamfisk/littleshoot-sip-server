@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.littleshoot.mina.common.IoSession;
 import org.lastbamboo.common.sip.proxy.SipRegistrar;
 import org.lastbamboo.common.sip.proxy.SipRequestAndResponseForwarder;
@@ -26,8 +26,7 @@ import org.lastbamboo.common.sip.stack.util.UriUtils;
 public class StatelessSipProxy implements SipRequestAndResponseForwarder
     {
 
-    private static final Log LOG = 
-        LogFactory.getLog(StatelessSipProxy.class);
+    private final Logger LOG = LoggerFactory.getLogger(StatelessSipProxy.class);
     
     private final SipRegistrar m_registrar;
     

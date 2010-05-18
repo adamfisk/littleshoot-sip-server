@@ -12,8 +12,8 @@ import java.net.Socket;
 import junit.framework.TestCase;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.littleshoot.mina.common.RuntimeIOException;
 import org.lastbamboo.common.sip.proxy.SipConstants;
 import org.lastbamboo.common.sip.proxy.SipProxy;
@@ -40,7 +40,7 @@ import org.lastbamboo.common.util.RuntimeIoException;
 public class SipServerTest extends TestCase
     {
 
-    private static final Log LOG = LogFactory.getLog(SipServerTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SipServerTest.class);
     
     private static final String REGISTER = 
         "REGISTER sip:lastbamboo.org SIP/2.0\r\n"+

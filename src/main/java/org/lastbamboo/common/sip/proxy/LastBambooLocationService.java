@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.lastbamboo.common.sip.stack.util.UriUtils;
 
 /**
@@ -17,8 +17,7 @@ public final class LastBambooLocationService implements LocationService
     /**
      * The log for this class.
      */
-    private final Log LOG =
-            LogFactory.getLog (LastBambooLocationService.class);
+    private final Logger LOG = LoggerFactory.getLogger (LastBambooLocationService.class);
 
     /**
      * URI utilities.

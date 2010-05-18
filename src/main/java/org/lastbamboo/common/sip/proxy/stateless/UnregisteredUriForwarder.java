@@ -10,8 +10,8 @@ import java.util.concurrent.Executors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.lastbamboo.common.sip.proxy.LocationService;
 import org.lastbamboo.common.sip.proxy.SipRegistrar;
@@ -32,8 +32,7 @@ import org.lastbamboo.common.sip.stack.util.UriUtils;
 public class UnregisteredUriForwarder implements SipRequestForwarder
     {
 
-    private static final Log LOG = 
-        LogFactory.getLog(UnregisteredUriForwarder.class);
+    private final Logger LOG = LoggerFactory.getLogger(UnregisteredUriForwarder.class);
     
     private final LocationService m_locationService;
     

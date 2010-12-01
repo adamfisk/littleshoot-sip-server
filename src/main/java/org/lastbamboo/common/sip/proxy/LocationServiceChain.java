@@ -7,7 +7,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 /**
  * A chain of location services, any one of which might handle a particular
@@ -58,8 +57,6 @@ public final class LocationServiceChain implements LocationService
 
         final LocationService service =
                 (LocationService) CollectionUtils.find (m_services, predicate);
-
-        Assert.notNull (service);
 
         return (service.getTargetSet (requestUri));
         }

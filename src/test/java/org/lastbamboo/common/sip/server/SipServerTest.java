@@ -34,8 +34,8 @@ import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayerImpl;
 import org.lastbamboo.common.sip.stack.util.UriUtils;
 import org.lastbamboo.common.sip.stack.util.UriUtilsImpl;
-import org.lastbamboo.common.util.NetworkUtils;
-import org.lastbamboo.common.util.RuntimeIoException;
+import org.littleshoot.util.NetworkUtils;
+import org.littleshoot.util.RuntimeIoException;
 
 public class SipServerTest extends TestCase
     {

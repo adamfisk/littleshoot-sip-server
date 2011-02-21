@@ -19,9 +19,9 @@ import org.lastbamboo.common.sip.stack.message.SipMessageFactory;
 import org.lastbamboo.common.sip.stack.message.SipMessageVisitorFactory;
 import org.lastbamboo.common.sip.stack.message.header.SipHeaderFactory;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
-import org.lastbamboo.common.util.JmxUtils;
-import org.lastbamboo.common.util.RuntimeIoException;
-import org.lastbamboo.common.util.mina.MinaTcpServer;
+import org.littleshoot.util.JmxUtils;
+import org.littleshoot.util.RuntimeIoException;
+import org.littleshoot.util.mina.MinaTcpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

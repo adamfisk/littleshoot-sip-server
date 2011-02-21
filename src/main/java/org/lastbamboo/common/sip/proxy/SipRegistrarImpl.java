@@ -19,7 +19,7 @@ import org.lastbamboo.common.sip.stack.message.SipResponse;
 import org.lastbamboo.common.sip.stack.message.header.SipHeader;
 import org.lastbamboo.common.sip.stack.message.header.SipHeaderNames;
 import org.lastbamboo.common.sip.stack.transport.SipTcpTransportLayer;
-import org.lastbamboo.common.util.MapUtils;
+import org.littleshoot.util.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
